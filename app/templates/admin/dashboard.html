@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard{% endblock %}
+{% block content %}
+<h1>Admin Dashboard</h1>
+<div class="grid metrics">
+  <div class="card"><strong>{{ students }}</strong><span>Active students</span></div>
+  <div class="card"><strong>{{ active_rooms }}</strong><span>Active rooms</span></div>
+  <div class="card"><strong>{{ occupied }}/{{ total_beds }}</strong><span>Occupied beds</span></div>
+  <div class="card"><strong>{{ available }}</strong><span>Available beds</span></div>
+  <div class="card"><strong>{{ open_complaints }}</strong><span>Open complaints</span></div>
+  <div class="card"><strong>₹{{ '%.2f'|format(outstanding) }}</strong><span>Outstanding fees</span></div>
+  <div class="card"><strong>{{ attendance_today }}</strong><span>Attendance today</span></div>
+</div>
+{% endblock %}

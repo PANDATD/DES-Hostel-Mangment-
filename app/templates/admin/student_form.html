@@ -1,0 +1,8 @@
+{% extends "base.html" %}{% block title %}Edit Student{% endblock %}{% block content %}
+<h1>Edit student</h1><div class="card"><form method="post" class="form-grid">{{ form.hidden_tag() }}
+<label>{{ form.username.label }}{{ form.username() }}</label><label>{{ form.email.label }}{{ form.email() }}</label><label>{{ form.password.label }}{{ form.password() }}</label>
+<label>{{ form.student_code.label }}{{ form.student_code() }}</label><label>{{ form.full_name.label }}{{ form.full_name() }}</label><label>{{ form.phone.label }}{{ form.phone() }}</label>
+<label>{{ form.course_id.label }}{{ form.course_id() }}</label><label>{{ form.academic_year_id.label }}{{ form.academic_year_id() }}</label><label>{{ form.resident_status.label }}{{ form.resident_status() }}</label>
+<label>{{ form.guardian_name.label }}{{ form.guardian_name() }}</label><label>{{ form.guardian_phone.label }}{{ form.guardian_phone() }}</label><label>{{ form.joined_on.label }}{{ form.joined_on() }}</label>
+<label class="wide">{{ form.address.label }}{{ form.address() }}</label><label class="checkbox-label">{{ form.active() }} {{ form.active.label.text }}</label><div>{{ form.submit(class_="primary") }} <a class="secondary" href="{{ url_for('admin.students') }}">Cancel</a></div>
+</form></div>{% endblock %}

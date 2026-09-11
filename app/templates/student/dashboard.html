@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Student Dashboard{% endblock %}
+{% block content %}
+<h1>Welcome, {{ profile.full_name }}</h1>
+{% set allocation = profile.current_allocation %}
+<p class="muted">{{ profile.course.name if profile.course else "Course not set" }}{% if profile.academic_year %} · {{ profile.academic_year.name }}{% endif %}</p>
+<div class="grid metrics">
+  <div class="card"><strong>{{ profile.student_code }}</strong><span>Student code</span></div>
+  <div class="card"><strong>{% if allocation %}{{ allocation.room.number }}{% else %}—{% endif %}</strong><span>Current room</span></div>
+  <div class="card"><strong>{{ open_complaints }}</strong><span>Open complaints</span></div>
+  <div class="card"><strong>₹{{ '%.2f'|format(balance) }}</strong><span>Fee balance</span></div>
+  <div class="card"><strong>{{ 'Marked' if attendance else 'Not marked' }}</strong><span>Attendance today</span></div>
+</div>
+{% endblock %}

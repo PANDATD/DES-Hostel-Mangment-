@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Students{% endblock %}
+{% block content %}
+<div class="section-title"><h1>Students</h1></div>
+<details class="card" open><summary>Create student</summary>
+<form method="post" class="form-grid">
+{{ form.hidden_tag() }}
+<label>{{ form.username.label }}{{ form.username() }}</label><label>{{ form.email.label }}{{ form.email() }}</label>
+<label>{{ form.password.label }}{{ form.password() }}</label><label>{{ form.student_code.label }}{{ form.student_code() }}</label>
+<label>{{ form.full_name.label }}{{ form.full_name() }}</label><label>{{ form.phone.label }}{{ form.phone() }}</label>
+<label>{{ form.course_id.label }}{{ form.course_id() }}</label><label>{{ form.academic_year_id.label }}{{ form.academic_year_id() }}</label>
+<label>{{ form.guardian_name.label }}{{ form.guardian_name() }}</label><label>{{ form.guardian_phone.label }}{{ form.guardian_phone() }}</label>
+<label>{{ form.joined_on.label }}{{ form.joined_on() }}</label><label class="wide">{{ form.address.label }}{{ form.address() }}</label>
+<div>{{ form.submit(class_="primary") }}</div>
+</form></details>
+<div class="card table-wrap"><table><thead><tr><th>Code</th><th>Name</th><th>Email</th><th>Course</th><th>Year</th><th>Room</th><th>Status</th><th>Actions</th></tr></thead><tbody>
+{% for student in students %}{% set allocation = student.current_allocation %}
+<tr><td>{{ student.student_code }}</td><td>{{ student.full_name }}</td><td>{{ student.user.email }}</td><td>{{ student.course.name if student.course else '—' }}</td><td>{{ student.academic_year.name if student.academic_year else '—' }}</td><td>{% if allocation %}{{ allocation.room.number }}{% if allocation.bed_label %} / {{ allocation.bed_label }}{% endif %}{% else %}Not allocated{% endif %}</td><td>{{ student.resident_status }}</td>
+<td><div class="actions"><a class="secondary small" href="{{ url_for('admin.edit_student', student_id=student.id) }}">Edit</a><form method="post" action="{{ url_for('admin.delete_student', student_id=student.id) }}" onsubmit="return confirm('Delete this student and all owned records?');"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="danger small" type="submit">Delete</button></form></div></td></tr>
+{% else %}<tr><td colspan="8">No students.</td></tr>{% endfor %}
+</tbody></table></div>
+{% endblock %}

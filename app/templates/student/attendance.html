@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Attendance{% endblock %}
+{% block content %}
+<h1>Geography Attendance</h1>
+<div class="card">
+  <p>Attendance uses your current browser location. Location permission is required.</p>
+  <form id="attendance-form" method="post">
+    {{ form.hidden_tag() }}
+    {{ form.latitude(id="latitude") }}
+    {{ form.longitude(id="longitude") }}
+    {{ form.accuracy(id="accuracy") }}
+    <button id="location-button" type="button" class="primary">Use current location & mark attendance</button>
+    <p id="location-status" class="muted"></p>
+  </form>
+</div>
+<div class="card table-wrap">
+<table>
+<thead><tr><th>Date</th><th>Time (UTC)</th><th>Distance</th><th>Accuracy</th><th>Late</th></tr></thead>
+<tbody>
+{% for record in records %}
+<tr><td>{{ record.attendance_date }}</td><td>{{ record.checked_in_at.strftime('%H:%M:%S') }}</td><td>{{ record.distance_metres }} m</td><td>{{ record.accuracy_metres }} m</td><td>{{ 'Yes' if record.is_late else 'No' }}</td></tr>
+{% else %}<tr><td colspan="5">No attendance yet.</td></tr>{% endfor %}
+</tbody>
+</table>
+</div>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='attendance.js') }}"></script>{% endblock %}
