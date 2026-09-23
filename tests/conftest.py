@@ -105,6 +105,27 @@ def seeded(app):
         }
 
 
+def test_config_defaults_when_numeric_env_values_are_empty(monkeypatch):
+    import importlib
+
+    monkeypatch.setenv("PASSWORD_RESET_TTL_MINUTES", "")
+    monkeypatch.setenv("MAIL_PORT", "")
+    monkeypatch.setenv("MAIL_TIMEOUT", "")
+
+    import app.config as config_module
+
+    importlib.reload(config_module)
+
+    assert config_module.Config.PASSWORD_RESET_TTL_MINUTES == 30
+    assert config_module.Config.MAIL_PORT == 587
+    assert config_module.Config.MAIL_TIMEOUT == 10.0
+
+    monkeypatch.delenv("PASSWORD_RESET_TTL_MINUTES")
+    monkeypatch.delenv("MAIL_PORT")
+    monkeypatch.delenv("MAIL_TIMEOUT")
+    importlib.reload(config_module)
+
+
 def login_admin(client):
     return client.post("/login", data={"login": "admin@example.com", "password": "Admin@123"})
 
