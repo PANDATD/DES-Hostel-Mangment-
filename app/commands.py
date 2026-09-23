@@ -269,6 +269,26 @@ def seed_demo() -> None:
     click.echo("IMPORTANT: update hostel geofence coordinates before real attendance use.")
 
 
+@click.command("reset-admin-password")
+@click.option("--email", default="admin@example.com", show_default=True)
+@click.option("--password", prompt=True, hide_input=True, confirmation_prompt=True)
+@with_appcontext
+def reset_admin_password(email: str, password: str) -> None:
+    """Reset an existing admin account password without storing it in source control."""
+    admin = db.session.scalar(
+        select(User).where(User.email == email.strip().lower(), User.role == Role.ADMIN)
+    )
+    if admin is None:
+        raise click.ClickException(f"No admin account found for {email}.")
+    if not password:
+        raise click.ClickException("Password must not be empty.")
+
+    admin.set_password(password)
+    admin.active = True
+    db.session.commit()
+    click.echo(f"Admin password reset successfully for {admin.email}.")
+
+
 @click.command("seed-master-data")
 @with_appcontext
 def seed_master_data() -> None:
@@ -300,4 +320,5 @@ def doctor() -> None:
 def register_commands(app: Flask) -> None:
     app.cli.add_command(seed_demo)
     app.cli.add_command(seed_master_data)
+    app.cli.add_command(reset_admin_password)
     app.cli.add_command(doctor)
