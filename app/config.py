@@ -42,12 +42,20 @@ class Config:
         )
 
     if _database_url:
+        # Make the Psycopg 3 driver explicit for PostgreSQL.
+        if _database_url.startswith("postgresql://"):
+            _database_url = _database_url.replace(
+                "postgresql://",
+                "postgresql+psycopg://",
+                1,
+            )
         SQLALCHEMY_DATABASE_URI = _database_url
 
     elif IS_VERCEL:
-        # TEMPORARY fallback only.
-        # Data stored here is NOT persistent across Vercel instances.
-        SQLALCHEMY_DATABASE_URI = "sqlite:////tmp/hostel.db"
+        raise RuntimeError(
+            "DATABASE_URL must be configured for Vercel deployments. "
+            "Use a persistent PostgreSQL database such as Neon."
+        )
 
     else:
         # Local development SQLite database
@@ -57,6 +65,7 @@ class Config:
 
     SQLALCHEMY_ENGINE_OPTIONS = {
         "pool_pre_ping": True,
+        "pool_recycle": 300,
     }
 
     # ---------------------------------------------------------
