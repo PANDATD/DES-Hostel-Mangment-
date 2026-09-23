@@ -109,6 +109,7 @@ def upgrade() -> None:
         ["student_id"],
         unique=True,
         sqlite_where=sa.text("ended_on IS NULL"),
+        postgresql_where=sa.text("ended_on IS NULL"),
     )
     op.create_index(
         "uq_room_alloc_current_bed",
@@ -116,6 +117,7 @@ def upgrade() -> None:
         ["room_id", "bed_label"],
         unique=True,
         sqlite_where=sa.text("ended_on IS NULL AND bed_label IS NOT NULL"),
+        postgresql_where=sa.text("ended_on IS NULL AND bed_label IS NOT NULL"),
     )
 
     op.create_table(
@@ -201,6 +203,7 @@ def upgrade() -> None:
         ["active"],
         unique=True,
         sqlite_where=sa.text("active = 1"),
+        postgresql_where=sa.text("active IS TRUE"),
     )
 
     op.create_table(
