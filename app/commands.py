@@ -275,6 +275,12 @@ def seed_demo() -> None:
 @with_appcontext
 def reset_admin_password(email: str, password: str) -> None:
     """Reset an existing admin account password without storing it in source control."""
+    if not inspect(db.engine).has_table("users"):
+        raise click.ClickException(
+            "Database schema is not initialized. Run "
+            "uv run flask --app run.py db upgrade first."
+        )
+
     admin = db.session.scalar(
         select(User).where(User.email == email.strip().lower(), User.role == Role.ADMIN)
     )
@@ -287,6 +293,40 @@ def reset_admin_password(email: str, password: str) -> None:
     admin.active = True
     db.session.commit()
     click.echo(f"Admin password reset successfully for {admin.email}.")
+
+
+@click.command("create-admin")
+@click.option("--email", prompt="Admin email")
+@click.option("--username", default="admin", show_default=True, prompt="Admin username")
+@click.option("--password", prompt=True, hide_input=True, confirmation_prompt=True)
+@with_appcontext
+def create_admin(email: str, username: str, password: str) -> None:
+    """Create an admin account or reset an existing admin account."""
+    if not inspect(db.engine).has_table("users"):
+        raise click.ClickException(
+            "Database schema is not initialized. Run "
+            "uv run flask --app run.py db upgrade first."
+        )
+
+    email = email.strip().lower()
+    username = username.strip()
+
+    if not email or not username or not password:
+        raise click.ClickException("Email, username, and password are required.")
+
+    admin = db.session.scalar(select(User).where(User.email == email))
+    if admin is None:
+        admin = User(email=email)
+        db.session.add(admin)
+
+    admin.username = username
+    admin.email = email
+    admin.role = Role.ADMIN
+    admin.active = True
+    admin.set_password(password)
+    db.session.commit()
+
+    click.echo(f"Admin account ready for {admin.email}.")
 
 
 @click.command("seed-master-data")
@@ -321,4 +361,5 @@ def register_commands(app: Flask) -> None:
     app.cli.add_command(seed_demo)
     app.cli.add_command(seed_master_data)
     app.cli.add_command(reset_admin_password)
+    app.cli.add_command(create_admin)
     app.cli.add_command(doctor)
