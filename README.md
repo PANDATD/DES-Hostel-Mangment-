@@ -108,6 +108,29 @@ Password: Student@123
 
 These are development credentials. Change them before any real deployment.
 
+## Local admin setup
+
+The SQLite database is created by the migration system. For a fresh checkout:
+
+```bash
+uv run flask --app run.py db upgrade
+uv run flask --app run.py doctor
+```
+
+To create or reset a local admin account without putting the password in source control:
+
+```bash
+uv run flask --app run.py create-admin
+```
+
+To reset an existing admin account only:
+
+```bash
+uv run flask --app run.py reset-admin-password --email admin@example.com
+```
+
+Both commands prompt for the password interactively. If the database schema has not been migrated, the commands stop with an explicit migration message instead of producing a database "no such table" traceback.
+
 ## Password-reset email configuration
 
 Configure these values in `.env` for SMTP delivery:
