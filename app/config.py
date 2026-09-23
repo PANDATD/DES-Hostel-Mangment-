@@ -63,9 +63,9 @@ class Config:
     # Password reset
     # ---------------------------------------------------------
 
-    PASSWORD_RESET_TTL_MINUTES = int(
-        os.getenv("PASSWORD_RESET_TTL_MINUTES", "30")
-    )
+    # Treat an explicitly empty deployment variable like an unset variable.
+    _password_reset_ttl = os.getenv("PASSWORD_RESET_TTL_MINUTES", "30").strip()
+    PASSWORD_RESET_TTL_MINUTES = int(_password_reset_ttl or "30")
 
     PASSWORD_RESET_SHOW_LINK = os.getenv(
         "PASSWORD_RESET_SHOW_LINK",
@@ -82,7 +82,8 @@ class Config:
     # ---------------------------------------------------------
 
     MAIL_SERVER = os.getenv("MAIL_SERVER", "")
-    MAIL_PORT = int(os.getenv("MAIL_PORT", "587"))
+    _mail_port = os.getenv("MAIL_PORT", "587").strip()
+    MAIL_PORT = int(_mail_port or "587")
     MAIL_USERNAME = os.getenv("MAIL_USERNAME", "")
     MAIL_PASSWORD = os.getenv("MAIL_PASSWORD", "")
 
@@ -101,9 +102,8 @@ class Config:
         "",
     )
 
-    MAIL_TIMEOUT = float(
-        os.getenv("MAIL_TIMEOUT", "10")
-    )
+    _mail_timeout = os.getenv("MAIL_TIMEOUT", "10").strip()
+    MAIL_TIMEOUT = float(_mail_timeout or "10")
 
     MAIL_SUPPRESS_SEND = os.getenv(
         "MAIL_SUPPRESS_SEND",
