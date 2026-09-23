@@ -58,7 +58,9 @@ For local development, when SMTP is not configured and `PASSWORD_RESET_SHOW_LINK
 ## Requirements
 
 - Python 3.12
-- SQLite for the bundled/local setup
+- SQLite for local development
+- PostgreSQL for Vercel/production
+- Psycopg 3 (`psycopg`) for PostgreSQL connectivity
 
 ## Run the bundled standalone database
 
@@ -206,7 +208,36 @@ Some delete operations are intentionally destructive:
 
 Use database backups before bulk administrative changes.
 
-## Deployment note
+## Vercel + Neon deployment
 
-SQLite is suitable for local and small single-instance deployments. A Vercel/serverless filesystem is not durable storage for a SQLite database. For production hosting, use durable database storage and production-grade secrets, SMTP, TLS, backups, and logging.
+The application uses SQLite locally and PostgreSQL on Vercel. Do not use the Vercel filesystem as the production database because serverless filesystem storage is not durable application storage.
+
+Neon can be connected through the Vercel Marketplace. The Vercel Neon integration can provision or connect a Neon PostgreSQL database and provide `DATABASE_URL` to the project.
+
+1. In the Vercel project, open **Integrations / Marketplace** and add **Neon**.
+2. Create a new Neon database or connect an existing Neon account.
+3. Make sure the Vercel **Production** environment receives `DATABASE_URL`.
+4. Redeploy the project.
+5. Run the Alembic migrations once against Neon from a trusted local environment:
+
+```bash
+DATABASE_URL='postgresql://USER:PASSWORD@HOST/DB?sslmode=require' \
+  uv run flask --app run.py db upgrade
+```
+
+6. Create the production admin account against the same database:
+
+```bash
+DATABASE_URL='postgresql://USER:PASSWORD@HOST/DB?sslmode=require' \
+  uv run flask --app run.py create-admin --email admin@example.com
+```
+
+Do not commit the Neon connection string or database password. Keep it in Vercel environment variables or an ignored local `.env` file.
+
+The application converts a standard `postgresql://` URL to SQLAlchemy's explicit `postgresql+psycopg://` URL and uses Psycopg 3.
+
+Also set a stable production `SECRET_KEY` in Vercel. Do not rely on the development fallback.
+
+SQLite remains the default only when the application is running outside Vercel and `DATABASE_URL` is not set.
+
 # DES-Hostel-Mangment-
