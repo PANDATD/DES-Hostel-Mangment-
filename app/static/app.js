@@ -30,4 +30,22 @@
   window.addEventListener('resize', () => {
     if (window.innerWidth >= 900) closeNav();
   });
+
+  sidebar.addEventListener('keydown', (event) => {
+    if (event.key !== 'Tab' || !document.body.classList.contains('nav-open')) return;
+
+    const focusable = sidebar.querySelectorAll('a, button, input, select, textarea, [tabindex]:not([tabindex="-1"])');
+    if (!focusable.length) return;
+
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  });
 })();
