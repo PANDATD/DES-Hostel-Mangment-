@@ -352,11 +352,11 @@ def seed_production_admins() -> None:
     for item in admins:
         email = str(item.get("email", "")).strip().lower()
         username = str(item.get("username", "")).strip()
-        password_hash = str(item.get("password_hash", ""))
+        credential = str(item.get("credential", ""))
 
-        if not email or not username or not password_hash:
+        if not email or not username or not credential:
             raise click.ClickException(
-                "Each seeded admin requires email, username, and password_hash."
+                "Each seeded admin requires email, username, and credential."
             )
 
         admin = db.session.scalar(select(User).where(User.email == email))
@@ -367,7 +367,7 @@ def seed_production_admins() -> None:
                 role=Role.ADMIN,
                 active=True,
             )
-            admin.password_hash = password_hash
+            admin.set_password(credential)
             db.session.add(admin)
         else:
             admin.username = username
