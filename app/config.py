@@ -4,6 +4,8 @@ import os
 import tempfile
 from pathlib import Path
 
+from sqlalchemy.engine import make_url
+
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 IS_VERCEL = bool(os.getenv("VERCEL"))
@@ -33,7 +35,12 @@ class Config:
 
     _database_url = os.getenv("DATABASE_URL", "").strip()
 
-    # Some PostgreSQL providers may still provide postgres://
+    # Vercel/Neon environment variables are sometimes pasted with
+    # surrounding quotes. Remove only one matching pair.
+    if len(_database_url) >= 2 and _database_url[0] == _database_url[-1]:
+        if _database_url[0] in {"'", '"'}:
+            _database_url = _database_url[1:-1].strip()
+
     if _database_url.startswith("postgres://"):
         _database_url = _database_url.replace(
             "postgres://",
@@ -42,13 +49,21 @@ class Config:
         )
 
     if _database_url:
-        # Make the Psycopg 3 driver explicit for PostgreSQL.
         if _database_url.startswith("postgresql://"):
             _database_url = _database_url.replace(
                 "postgresql://",
                 "postgresql+psycopg://",
                 1,
             )
+
+        try:
+            make_url(_database_url)
+        except Exception as exc:
+            raise RuntimeError(
+                "DATABASE_URL is not a valid PostgreSQL connection string. "
+                "Copy the Neon connection string into Vercel without surrounding quotes."
+            ) from exc
+
         SQLALCHEMY_DATABASE_URI = _database_url
 
     elif IS_VERCEL:
@@ -72,7 +87,6 @@ class Config:
     # Password reset
     # ---------------------------------------------------------
 
-    # Treat an explicitly empty deployment variable like an unset variable.
     _password_reset_ttl = os.getenv("PASSWORD_RESET_TTL_MINUTES", "30").strip()
     PASSWORD_RESET_TTL_MINUTES = int(_password_reset_ttl or "30")
 
