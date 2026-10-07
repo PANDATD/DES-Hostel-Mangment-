@@ -1,4 +1,4 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "buildCommand": "npm run build && flask --app run.py db upgrade && flask --app run.py seed-production-admins && flask --app run.py db current"
+  "buildCommand": "flask --app run.py db upgrade && flask --app run.py seed-production-admins && flask --app run.py db current"
 }
