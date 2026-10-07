@@ -1,7 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "build:css": "tailwindcss -i ./app/static/tailwind.css -o ./app/static/app.css --minify",
+    "build:css": "@tailwindcss/cli -i ./app/static/tailwind.css -o ./app/static/app.css --minify",
     "build:icons": "mkdir -p ./app/static/vendor/fontawesome/css ./app/static/vendor/fontawesome/webfonts && cp node_modules/@fortawesome/fontawesome-free/css/fontawesome.css node_modules/@fortawesome/fontawesome-free/css/solid.css node_modules/@fortawesome/fontawesome-free/css/brands.css ./app/static/vendor/fontawesome/css/ && cp -R node_modules/@fortawesome/fontawesome-free/webfonts/. ./app/static/vendor/fontawesome/webfonts/",
     "build": "npm run build:icons && npm run build:css"
   },
