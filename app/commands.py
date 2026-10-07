@@ -329,6 +329,56 @@ def create_admin(email: str, username: str, password: str) -> None:
     click.echo(f"Admin account ready for {admin.email}.")
 
 
+
+@click.command("seed-production-admins")
+@with_appcontext
+def seed_production_admins() -> None:
+    """Create production admin accounts from the SEED_ADMIN_USERS secret."""
+    raw = os.getenv("SEED_ADMIN_USERS", "").strip()
+    if not raw:
+        click.echo("No production admin seed data configured.")
+        return
+
+    import json
+
+    try:
+        admins = json.loads(raw)
+    except json.JSONDecodeError as exc:
+        raise click.ClickException("SEED_ADMIN_USERS must contain valid JSON.") from exc
+
+    if not isinstance(admins, list):
+        raise click.ClickException("SEED_ADMIN_USERS must be a JSON list.")
+
+    for item in admins:
+        email = str(item.get("email", "")).strip().lower()
+        username = str(item.get("username", "")).strip()
+        password = str(item.get("password", ""))
+
+        if not email or not username or not password:
+            raise click.ClickException(
+                "Each seeded admin requires email, username, and password."
+            )
+
+        admin = db.session.scalar(select(User).where(User.email == email))
+        if admin is None:
+            admin = User(
+                username=username,
+                email=email,
+                role=Role.ADMIN,
+                active=True,
+            )
+            admin.set_password(password)
+            db.session.add(admin)
+        else:
+            admin.username = username
+            admin.email = email
+            admin.role = Role.ADMIN
+            admin.active = True
+
+    db.session.commit()
+    click.echo(f"Production admins ready: {len(admins)}")
+
+
 @click.command("seed-master-data")
 @with_appcontext
 def seed_master_data() -> None:
@@ -360,6 +410,7 @@ def doctor() -> None:
 def register_commands(app: Flask) -> None:
     app.cli.add_command(seed_demo)
     app.cli.add_command(seed_master_data)
+    app.cli.add_command(seed_production_admins)
     app.cli.add_command(reset_admin_password)
     app.cli.add_command(create_admin)
     app.cli.add_command(doctor)
