@@ -1,13 +1,16 @@
 {
   "private": true,
   "scripts": {
-    "build:css": "@tailwindcss/cli -i ./app/static/tailwind.css -o ./app/static/app.css --minify",
-    "build:icons": "mkdir -p ./app/static/vendor/fontawesome && cp -R node_modules/@fortawesome/fontawesome-free/. ./app/static/vendor/fontawesome/",
-    "build": "npm run build:icons && npm run build:css"
+    "build": "npm run build:css",
+    "build:css": "@tailwindcss/cli -i ./app/static/tailwind.css -o ./app/static/app.css --minify"
   },
   "dependencies": {
     "@tailwindcss/cli": "4.3.3",
     "tailwindcss": "4.3.3",
     "@fortawesome/fontawesome-free": "7.3.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "4.3.3",
+    "tailwindcss": "4.3.3"
   }
 }
