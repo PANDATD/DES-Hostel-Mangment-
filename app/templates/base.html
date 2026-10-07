@@ -1,9 +1,36 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="scheme-light" data-theme="light">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#1d2021">
+  <meta name="theme-color" content="#F7F8FA">
+  <meta name="description" content="HostelOS is a responsive hostel management system for students and administrators, covering students, rooms, fees, attendance, complaints and hostel operations.">
+  <meta name="author" content="Tejas Dixit">
+  <meta name="creator" content="Tejas Dixit">
+  <meta name="publisher" content="Tejas Dixit">
+  <meta name="robots" content="index, follow">
+  <meta name="application-name" content="HostelOS">
+  <link rel="canonical" href="https://des-hostel-mangment.vercel.app{{ request.path }}">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="HostelOS">
+  <meta property="og:title" content="{% block og_title %}HostelOS — Professional Hostel Management{% endblock %}">
+  <meta property="og:description" content="Modern hostel operations management for students and administrators.">
+  <meta property="og:url" content="https://des-hostel-mangment.vercel.app{{ request.path }}">
+  <meta property="og:locale" content="en_IN">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="HostelOS — Professional Hostel Management">
+  <meta name="twitter:description" content="Modern hostel operations management for students and administrators.">
+  <script>
+    (() => {
+      const theme = localStorage.getItem("hostelos-theme");
+      const dark = theme === "dark" || (!theme && window.matchMedia("(prefers-color-scheme: dark)").matches);
+      document.documentElement.classList.toggle("dark", dark);
+      document.documentElement.dataset.theme = dark ? "dark" : "light";
+    })();
+  </script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='vendor/fontawesome/css/fontawesome.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='vendor/fontawesome/css/solid.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='vendor/fontawesome/css/brands.css') }}">
   <title>{% block title %}Hostel Management{% endblock %}</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='app.css') }}">
   {% block head %}{% endblock %}
@@ -18,7 +45,7 @@
         <span class="brand-mark" aria-hidden="true">HM</span>
         <span class="brand-text"><strong>Hostel</strong><small>Management</small></span>
       </a>
-      <button class="menu-toggle" type="button" aria-controls="app-sidebar" aria-expanded="false" aria-label="Open navigation">
+      <div class="flex items-center gap-2"><button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch theme" title="Switch theme"><i class="fa-solid fa-sun theme-light-icon" aria-hidden="true"></i><i class="fa-solid fa-moon theme-dark-icon" aria-hidden="true"></i></button><button class="menu-toggle" type="button" aria-controls="app-sidebar" aria-expanded="false" aria-label="Open navigation">
         <span></span><span></span><span></span>
       </button>
     </header>
@@ -37,21 +64,21 @@
         <nav class="primary-nav">
           <p class="nav-label">Menu</p>
           {% if current_user.role == 'ADMIN' %}
-            <a class="nav-link {{ 'active' if endpoint == 'admin.dashboard' else '' }}" href="{{ url_for('admin.dashboard') }}"><span class="nav-icon" aria-hidden="true">⌂</span><span>Dashboard</span></a>
-            <a class="nav-link {{ 'active' if endpoint in ['admin.students', 'admin.edit_student'] else '' }}" href="{{ url_for('admin.students') }}"><span class="nav-icon" aria-hidden="true">◎</span><span>Students</span></a>
-            <a class="nav-link {{ 'active' if endpoint in ['admin.blocks', 'admin.edit_block'] else '' }}" href="{{ url_for('admin.blocks') }}"><span class="nav-icon" aria-hidden="true">▦</span><span>Blocks</span></a>
-            <a class="nav-link {{ 'active' if endpoint in ['admin.rooms', 'admin.create_room', 'admin.edit_room'] else '' }}" href="{{ url_for('admin.rooms') }}"><span class="nav-icon" aria-hidden="true">▣</span><span>Rooms</span></a>
-            <a class="nav-link {{ 'active' if endpoint in ['admin.complaints', 'admin.edit_complaint'] else '' }}" href="{{ url_for('admin.complaints') }}"><span class="nav-icon" aria-hidden="true">!</span><span>Complaints</span></a>
-            <a class="nav-link {{ 'active' if endpoint in ['admin.fees', 'admin.edit_fee', 'admin.edit_payment'] else '' }}" href="{{ url_for('admin.fees') }}"><span class="nav-icon" aria-hidden="true">₹</span><span>Fees</span></a>
-            <a class="nav-link {{ 'active' if endpoint in ['admin.attendance', 'admin.create_geofence', 'admin.edit_geofence', 'admin.edit_attendance'] else '' }}" href="{{ url_for('admin.attendance') }}"><span class="nav-icon" aria-hidden="true">✓</span><span>Attendance</span></a>
-            <a class="nav-link {{ 'active' if endpoint in ['admin.master_data', 'admin.edit_master_data'] else '' }}" href="{{ url_for('admin.master_data') }}"><span class="nav-icon" aria-hidden="true">◆</span><span>Master Data</span></a>
+            <a class="nav-link {{ 'active' if endpoint == 'admin.dashboard' else '' }}" href="{{ url_for('admin.dashboard') }}"><span class="nav-icon" aria-hidden="true"><i class="fa-solid fa-gauge-high"></i></span><span>Dashboard</span></a>
+            <a class="nav-link {{ 'active' if endpoint in ['admin.students', 'admin.edit_student'] else '' }}" href="{{ url_for('admin.students') }}"><span class="nav-icon" aria-hidden="true"><i class="fa-solid fa-users"></i></span><span>Students</span></a>
+            <a class="nav-link {{ 'active' if endpoint in ['admin.blocks', 'admin.edit_block'] else '' }}" href="{{ url_for('admin.blocks') }}"><span class="nav-icon" aria-hidden="true"><i class="fa-solid fa-building"></i></span><span>Blocks</span></a>
+            <a class="nav-link {{ 'active' if endpoint in ['admin.rooms', 'admin.create_room', 'admin.edit_room'] else '' }}" href="{{ url_for('admin.rooms') }}"><span class="nav-icon" aria-hidden="true"><i class="fa-solid fa-door-open"></i></span><span>Rooms</span></a>
+            <a class="nav-link {{ 'active' if endpoint in ['admin.complaints', 'admin.edit_complaint'] else '' }}" href="{{ url_for('admin.complaints') }}"><span class="nav-icon" aria-hidden="true"><i class="fa-solid fa-triangle-exclamation"></i></span><span>Complaints</span></a>
+            <a class="nav-link {{ 'active' if endpoint in ['admin.fees', 'admin.edit_fee', 'admin.edit_payment'] else '' }}" href="{{ url_for('admin.fees') }}"><span class="nav-icon" aria-hidden="true"><i class="fa-solid fa-indian-rupee-sign"></i></span><span>Fees</span></a>
+            <a class="nav-link {{ 'active' if endpoint in ['admin.attendance', 'admin.create_geofence', 'admin.edit_geofence', 'admin.edit_attendance'] else '' }}" href="{{ url_for('admin.attendance') }}"><span class="nav-icon" aria-hidden="true"><i class="fa-solid fa-calendar-check"></i></span><span>Attendance</span></a>
+            <a class="nav-link {{ 'active' if endpoint in ['admin.master_data', 'admin.edit_master_data'] else '' }}" href="{{ url_for('admin.master_data') }}"><span class="nav-icon" aria-hidden="true"><i class="fa-solid fa-database"></i></span><span>Master Data</span></a>
           {% else %}
             <a class="nav-link {{ 'active' if endpoint == 'student.dashboard' else '' }}" href="{{ url_for('student.dashboard') }}"><span class="nav-icon" aria-hidden="true">⌂</span><span>Dashboard</span></a>
             <a class="nav-link {{ 'active' if endpoint in ['student.complaints', 'student.edit_complaint'] else '' }}" href="{{ url_for('student.complaints') }}"><span class="nav-icon" aria-hidden="true">!</span><span>Complaints</span></a>
             <a class="nav-link {{ 'active' if endpoint == 'student.fees' else '' }}" href="{{ url_for('student.fees') }}"><span class="nav-icon" aria-hidden="true">₹</span><span>Fees</span></a>
             <a class="nav-link {{ 'active' if endpoint == 'student.attendance' else '' }}" href="{{ url_for('student.attendance') }}"><span class="nav-icon" aria-hidden="true">✓</span><span>Attendance</span></a>
           {% endif %}
-          <a class="nav-link {{ 'active' if endpoint == 'auth.profile' else '' }}" href="{{ url_for('auth.profile') }}"><span class="nav-icon" aria-hidden="true">●</span><span>Profile</span></a>
+          <a class="nav-link {{ 'active' if endpoint == 'auth.profile' else '' }}" href="{{ url_for('auth.profile') }}"><span class="nav-icon" aria-hidden="true"><i class="fa-solid fa-user"></i></span><span>Profile</span></a>
         </nav>
 
         <div class="sidebar-foot">
@@ -61,7 +88,7 @@
           </div>
           <form action="{{ url_for('auth.logout') }}" method="post">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-            <button class="logout-button" type="submit">Sign out</button>
+            <button class="logout-button" type="submit"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i> Sign out</button>
           </form>
         </div>
       </aside>
@@ -91,6 +118,16 @@
   {% else %}
     </main>
   {% endif %}
+
+  <footer class="site-footer">
+    <div class="content-inner" style="padding-top:0;padding-bottom:18px;">
+      <span>HostelOS · Professional Hostel Management</span>
+      <span> · </span>
+      <a href="https://tejasdixit.in" rel="author noopener" target="_blank">Maintained & developed by Tejas Dixit</a>
+      <span> · </span>
+      <a href="https://des-hostel-mangment.vercel.app" rel="home">Live application</a>
+    </div>
+  </footer>
 
   <script src="{{ url_for('static', filename='app.js') }}" defer></script>
   {% block scripts %}{% endblock %}
