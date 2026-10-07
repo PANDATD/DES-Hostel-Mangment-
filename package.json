@@ -6,8 +6,8 @@
     "build": "npm run build:icons && npm run build:css"
   },
   "devDependencies": {
-    "@tailwindcss/cli": "^4.3.0",
-    "tailwindcss": "^4.3.0",
+    "@tailwindcss/cli": "4.3.3",
+    "tailwindcss": "4.3.3",
     "@fortawesome/fontawesome-free": "7.3.1"
   }
 }
