@@ -51,6 +51,7 @@
             <a class="nav-link {{ 'active' if endpoint == 'student.fees' else '' }}" href="{{ url_for('student.fees') }}"><span class="nav-icon" aria-hidden="true">₹</span><span>Fees</span></a>
             <a class="nav-link {{ 'active' if endpoint == 'student.attendance' else '' }}" href="{{ url_for('student.attendance') }}"><span class="nav-icon" aria-hidden="true">✓</span><span>Attendance</span></a>
           {% endif %}
+          <a class="nav-link {{ 'active' if endpoint == 'auth.profile' else '' }}" href="{{ url_for('auth.profile') }}"><span class="nav-icon" aria-hidden="true">●</span><span>Profile</span></a>
         </nav>
 
         <div class="sidebar-foot">
