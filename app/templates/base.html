@@ -63,7 +63,7 @@
     {% set endpoint = request.endpoint or '' %}
     <header class="mobile-header">
       <a class="brand" href="{{ url_for('main.index') }}" aria-label="Hostel Management home">
-        <span class="brand-mark" aria-hidden="true">HM</span>
+        <img class="brand-mark brand-logo" src="{{ url_for('static', filename='logo.svg') }}" alt="HostelOS">
         <span class="brand-text"><strong>Hostel</strong><small>Management</small></span>
       </a>
       <div class="flex items-center gap-2"><button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch theme" title="Switch theme"><i class="fa-solid fa-sun theme-light-icon" aria-hidden="true"></i><i class="fa-solid fa-moon theme-dark-icon" aria-hidden="true"></i></button><button class="menu-toggle" type="button" aria-controls="app-sidebar" aria-expanded="false" aria-label="Open navigation">
@@ -123,10 +123,14 @@
         <div class="content-inner">
   {% else %}
     <header class="guest-header">
-      <a class="brand" href="{{ url_for('main.index') }}" aria-label="Hostel Management home">
-        <span class="brand-mark" aria-hidden="true">HM</span>
-        <span class="brand-text"><strong>Hostel</strong><small>Management</small></span>
+      <a class="brand" href="{{ url_for('main.index') }}" aria-label="HostelOS home">
+        <img class="brand-mark brand-logo" src="{{ url_for('static', filename='logo.svg') }}" alt="HostelOS">
+        <span class="brand-text"><strong>HostelOS</strong><small>Professional Hostel Management</small></span>
       </a>
+      <button class="theme-toggle ml-auto" type="button" data-theme-toggle aria-label="Switch theme" title="Switch theme">
+        <i class="fa-solid fa-sun theme-light-icon" aria-hidden="true"></i>
+        <i class="fa-solid fa-moon theme-dark-icon" aria-hidden="true"></i>
+      </button>
     </header>
     <main class="guest-main" id="main-content" tabindex="-1">
   {% endif %}
