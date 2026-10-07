@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Profile{% endblock %}
+{% block content %}
+<h1>Profile</h1>
+
+<div class="card">
+  <h2>Account</h2>
+  <p><strong>Username:</strong> {{ current_user.username }}</p>
+  <p><strong>Email:</strong> {{ current_user.email }}</p>
+  <p><strong>Role:</strong> {{ "Administrator" if current_user.role == "ADMIN" else "Student" }}</p>
+</div>
+
+<div class="card">
+  <h2>Change password</h2>
+  <p class="muted">Enter your current password and choose a new password.</p>
+  <form method="post" class="form-grid">
+    {{ form.hidden_tag() }}
+    <label class="wide">
+      {{ form.current_password.label }}
+      {{ form.current_password(autocomplete="current-password") }}
+      {% for error in form.current_password.errors %}<small class="error">{{ error }}</small>{% endfor %}
+    </label>
+    <label>
+      {{ form.password.label }}
+      {{ form.password(autocomplete="new-password") }}
+      {% for error in form.password.errors %}<small class="error">{{ error }}</small>{% endfor %}
+    </label>
+    <label>
+      {{ form.confirm_password.label }}
+      {{ form.confirm_password(autocomplete="new-password") }}
+      {% for error in form.confirm_password.errors %}<small class="error">{{ error }}</small>{% endfor %}
+    </label>
+    <div class="wide">
+      {{ form.submit(class_="primary") }}
+    </div>
+  </form>
+</div>
+{% endblock %}
