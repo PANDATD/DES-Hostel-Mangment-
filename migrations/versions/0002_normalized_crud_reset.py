@@ -151,7 +151,8 @@ def upgrade() -> None:
             if not exists:
                 bind.execute(
                     sa.text(
-                        f"INSERT INTO {table_name}(code,name,active,created_at,updated_at) VALUES (:code,:name,1,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP)"
+                        f"INSERT INTO {table_name}(code,name,active,created_at,updated_at) "
+                        f"VALUES (:code,:name,TRUE,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP)"
                     ),
                     {"code": code, "name": name},
                 )
