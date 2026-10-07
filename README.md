@@ -216,15 +216,15 @@ Neon can be connected through the Vercel Marketplace. The Vercel Neon integratio
 
 1. In the Vercel project, open **Integrations / Marketplace** and add **Neon**.
 2. Create a new Neon database or connect an existing Neon account.
-3. Make sure the Vercel **Production** environment receives `DATABASE_URL`.
+3. Make sure the Vercel **Production** environment receives `DATABASE_URL`. If Neon also provides `DATABASE_URL_UNPOOLED`, add that too.
 4. Redeploy the project.
-5. Run the Alembic migrations once against Neon from a trusted local environment:
+5. The Vercel build automatically runs:
 
 ```bash
-DATABASE_URL='postgresql://USER:PASSWORD@HOST/DB?sslmode=require' \
-  uv run flask --app run.py db upgrade
+python3 -m flask --app run.py db upgrade
 ```
 
+The build script prefers `DATABASE_URL_UNPOOLED` for migrations and falls back to `DATABASE_URL`. This creates/updates all Alembic-managed tables in Neon before the deployment is served.
 6. Create the production admin account against the same database:
 
 ```bash
@@ -234,7 +234,7 @@ DATABASE_URL='postgresql://USER:PASSWORD@HOST/DB?sslmode=require' \
 
 Do not commit the Neon connection string or database password. Keep it in Vercel environment variables or an ignored local `.env` file.
 
-The application converts a standard `postgresql://` URL to SQLAlchemy's explicit `postgresql+psycopg://` URL and uses Psycopg 3.
+The application converts a standard `postgresql://` URL to SQLAlchemy's explicit `postgresql+psycopg://` URL and uses Psycopg 3. The runtime uses `DATABASE_URL`; the Vercel build uses `DATABASE_URL_UNPOOLED` for migrations when it is available.
 
 Also set a stable production `SECRET_KEY` in Vercel. Do not rely on the development fallback.
 
