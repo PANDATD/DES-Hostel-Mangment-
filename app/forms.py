@@ -39,6 +39,20 @@ class ResetPasswordForm(FlaskForm):
     submit = SubmitField("Reset password")
 
 
+class ChangePasswordForm(FlaskForm):
+    current_password = PasswordField(
+        "Current password", validators=[InputRequired(), Length(max=255)]
+    )
+    password = PasswordField(
+        "New password", validators=[InputRequired(), Length(min=8, max=255)]
+    )
+    confirm_password = PasswordField(
+        "Confirm new password",
+        validators=[InputRequired(), EqualTo("password", message="Passwords must match.")],
+    )
+    submit = SubmitField("Change password")
+
+
 class StudentCreateForm(FlaskForm):
     username = StringField("Username", validators=[InputRequired(), Length(min=3, max=80)])
     email = StringField("Email", validators=[InputRequired(), Email(), Length(max=255)])
