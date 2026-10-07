@@ -35,6 +35,12 @@ class Config:
 
     _database_url = os.getenv("DATABASE_URL", "").strip()
 
+    # Use the direct Neon connection when DATABASE_URL is not present.
+    # This keeps migrations and runtime working if only the unpooled
+    # Neon connection is configured in Vercel.
+    if not _database_url:
+        _database_url = os.getenv("DATABASE_URL_UNPOOLED", "").strip()
+
     # Vercel/Neon environment variables are sometimes pasted with
     # surrounding quotes. Remove only one matching pair.
     if len(_database_url) >= 2 and _database_url[0] == _database_url[-1]:
@@ -60,7 +66,7 @@ class Config:
             make_url(_database_url)
         except Exception as exc:
             raise RuntimeError(
-                "DATABASE_URL is not a valid PostgreSQL connection string. "
+                "DATABASE_URL or DATABASE_URL_UNPOOLED is not a valid PostgreSQL connection string. "
                 "Copy the Neon connection string into Vercel without surrounding quotes."
             ) from exc
 
@@ -68,8 +74,8 @@ class Config:
 
     elif IS_VERCEL:
         raise RuntimeError(
-            "DATABASE_URL must be configured for Vercel deployments. "
-            "Use a persistent PostgreSQL database such as Neon."
+            "DATABASE_URL or DATABASE_URL_UNPOOLED must be configured for Vercel deployments. "
+            "Connect a Neon PostgreSQL database and add its connection string to Vercel."
         )
 
     else:
