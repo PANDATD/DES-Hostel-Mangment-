@@ -9,7 +9,7 @@ from flask_login import current_user, login_required, login_user, logout_user
 from sqlalchemy import func, or_, select
 
 from app.extensions import db
-from app.forms import ForgotPasswordForm, LoginForm, ResetPasswordForm
+from app.forms import ChangePasswordForm, ForgotPasswordForm, LoginForm, ResetPasswordForm
 from app.models import User, utcnow
 from app.services import (
     consume_password_reset_token,
@@ -57,6 +57,22 @@ def login() -> Any:
             return redirect(url_for("main.index"))
         flash("Invalid username/email or password.", "error")
     return render_template("auth/login.html", form=form)
+
+
+@bp.route("/profile", methods=["GET", "POST"])
+@login_required
+def profile() -> Any:
+    form = ChangePasswordForm()
+    if form.validate_on_submit():
+        if not current_user.check_password(form.current_password.data):
+            flash("Current password is incorrect.", "error")
+        else:
+            current_user.set_password(form.password.data)
+            db.session.commit()
+            flash("Password changed successfully.", "success")
+            return redirect(url_for("auth.profile"))
+
+    return render_template("auth/profile.html", form=form)
 
 
 @bp.route("/forgot-password", methods=["GET", "POST"])
