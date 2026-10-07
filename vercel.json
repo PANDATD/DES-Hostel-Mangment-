@@ -1,4 +1,4 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "buildCommand": "if [ -n \"$DATABASE_URL_UNPOOLED\" ]; then export DATABASE_URL=\"$DATABASE_URL_UNPOOLED\"; fi; npm install --no-audit --no-fund && npm run build && python3 -m flask --app run.py db upgrade && python3 -m flask --app run.py seed-production-admins && python3 -m flask --app run.py db current"
+  "buildCommand": "npm run build && flask --app run.py db upgrade && flask --app run.py seed-production-admins && flask --app run.py db current"
 }
