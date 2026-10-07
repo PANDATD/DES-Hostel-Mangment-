@@ -2,103 +2,78 @@
 {% block title %}HostelOS — Professional Hostel Management{% endblock %}
 {% block og_title %}HostelOS — Professional Hostel Management{% endblock %}
 {% block content %}
-<section class="relative overflow-hidden rounded-[1.25rem] border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow-lg)]">
-  <div class="absolute -right-32 -top-32 h-80 w-80 rounded-full bg-[color-mix(in_srgb,var(--brand)_12%,transparent)] blur-3xl"></div>
-  <div class="grid items-center gap-10 p-7 sm:p-10 lg:grid-cols-[1.08fr_.92fr] lg:p-14">
-    <div class="relative z-10">
-      <div class="mb-5 inline-flex items-center gap-2 rounded-full border border-[var(--border)] bg-[var(--surface-soft)] px-3 py-1.5 text-xs font-semibold text-[var(--text-soft)]">
-        <span class="h-2 w-2 rounded-full bg-[var(--brand-2)]"></span>
-        Hostel operations, simplified
-      </div>
-      <h1 class="max-w-3xl text-[clamp(2.25rem,6vw,4.5rem)] font-bold leading-[1.03] tracking-[-.045em] text-[var(--text)]">
-        Run your hostel with <span class="text-[var(--brand)]">clarity.</span>
-      </h1>
-      <p class="mt-6 max-w-2xl text-base leading-7 text-[var(--text-soft)] sm:text-lg">
-        HostelOS brings students, rooms, attendance, fees and complaints into one focused operational workspace.
-      </p>
-      <div class="mt-8 flex flex-col gap-3 sm:flex-row">
-        <a href="{{ url_for('auth.login') }}" class="primary inline-flex min-h-12 items-center justify-center gap-2 rounded-[.625rem] px-5 text-sm font-bold">
-          <i class="fa-solid fa-arrow-right-to-bracket" aria-hidden="true"></i>
-          Sign in
-        </a>
-        <a href="#features" class="secondary inline-flex min-h-12 items-center justify-center gap-2 rounded-[.625rem] px-5 text-sm font-bold">
-          Explore platform
-          <i class="fa-solid fa-arrow-down" aria-hidden="true"></i>
-        </a>
-      </div>
-      <div class="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-xs font-medium text-[var(--text-faint)]">
-        <span><i class="fa-solid fa-mobile-screen-button mr-1.5 text-[var(--brand)]"></i>Mobile-first</span>
-        <span><i class="fa-solid fa-shield-halved mr-1.5 text-[var(--brand)]"></i>Role-aware</span>
-        <span><i class="fa-solid fa-bolt mr-1.5 text-[var(--brand-2)]"></i>Fast workflow</span>
-      </div>
-    </div>
+<div class="home-page">
+  <section class="home-hero">
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <div class="eyebrow">Hostel operations, simplified</div>
+        <h1>Run your hostel with <span>clarity.</span></h1>
+        <p>One focused workspace for students, rooms, attendance, fees and complaints — designed for fast daily operations on desktop and mobile.</p>
 
-    <div class="relative">
-      <div class="overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--surface-soft)] shadow-[var(--shadow)]">
-        <img
-          src="https://images.unsplash.com/photo-1643877107082-8ee9da17c090?auto=format&fit=crop&fm=jpg&q=80&w=1400"
-          alt="Modern hostel-style interior"
-          class="h-[320px] w-full object-cover sm:h-[390px]"
-          loading="eager"
-          fetchpriority="high"
-        >
-        <div class="grid grid-cols-2 gap-3 border-t border-[var(--border)] bg-[var(--surface)] p-4">
-          <div>
-            <p class="text-xs font-semibold text-[var(--text-faint)]">OPERATIONS</p>
-            <p class="mt-1 text-lg font-bold text-[var(--text)]">One workspace</p>
-          </div>
-          <div>
-            <p class="text-xs font-semibold text-[var(--text-faint)]">EXPERIENCE</p>
-            <p class="mt-1 text-lg font-bold text-[var(--text)]">Built for mobile</p>
-          </div>
+        <div class="hero-actions">
+          <a href="{{ url_for('auth.login') }}" class="primary"><i class="fa-solid fa-arrow-right-to-bracket" aria-hidden="true"></i> Sign in</a>
+          <a href="#features" class="secondary">Explore platform <i class="fa-solid fa-arrow-down" aria-hidden="true"></i></a>
+        </div>
+
+        <div class="hero-points">
+          <span class="hero-point"><i class="fa-solid fa-mobile-screen-button" aria-hidden="true"></i>Mobile-first</span>
+          <span class="hero-point"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i>Role-aware</span>
+          <span class="hero-point"><i class="fa-solid fa-bolt" aria-hidden="true"></i>Fast workflow</span>
         </div>
       </div>
-      <p class="mt-2 text-right text-[11px] text-[var(--text-faint)]">
-        Image: <a href="https://unsplash.com/photos/a-room-with-a-couch-computer-desk-and-a-chair-w8OydDk2ANc" target="_blank" rel="noopener">Unsplash</a>
-      </p>
-    </div>
-  </div>
-</section>
 
-<section id="features" class="py-16 sm:py-20">
-  <div class="max-w-2xl">
-    <p class="text-xs font-bold uppercase tracking-[.16em] text-[var(--brand)]">Platform</p>
-    <h2 class="mt-3 text-3xl font-bold tracking-[-.025em] text-[var(--text)] sm:text-4xl">Everything important, in one place.</h2>
-    <p class="mt-4 text-[var(--text-soft)]">A focused interface designed around the daily workflow of hostel administrators and students.</p>
-  </div>
-
-  <div class="mt-9 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-    {% set features = [
-      ('fa-users', 'Student management', 'Profiles, academic details and room allocations stay organized.'),
-      ('fa-door-open', 'Rooms & beds', 'Manage blocks, rooms, capacity and current allocations.'),
-      ('fa-calendar-check', 'Attendance', 'Keep daily attendance records with location-aware workflows.'),
-      ('fa-indian-rupee-sign', 'Fees & payments', 'Track fees, balances and payment history without spreadsheets.'),
-      ('fa-triangle-exclamation', 'Complaints', 'Give students a clear channel to raise and follow complaints.'),
-      ('fa-chart-line', 'Operations overview', 'Surface the metrics that matter through focused dashboards.')
-    ] %}
-    {% for icon, title, description in features %}
-      <article class="group rounded-[.875rem] border border-[var(--border)] bg-[var(--surface)] p-6 shadow-[var(--shadow-sm)] transition hover:-translate-y-0.5 hover:shadow-[var(--shadow)]">
-        <div class="grid h-11 w-11 place-items-center rounded-[.625rem] bg-[var(--brand-3)] text-[var(--brand)]">
-          <i class="fa-solid {{ icon }}" aria-hidden="true"></i>
+      <div class="hero-visual">
+        <div class="hero-image-card">
+          <img src="https://images.unsplash.com/photo-1643877107082-8ee9da17c090?auto=format&fit=crop&fm=jpg&q=80&w=1400" alt="Modern hostel-style interior" loading="eager" fetchpriority="high">
+          <div class="hero-data">
+            <div class="hero-data-item">
+              <span>OPERATIONS</span>
+              <strong>One workspace</strong>
+            </div>
+            <div class="hero-data-item">
+              <span>EXPERIENCE</span>
+              <strong>Built for mobile</strong>
+            </div>
+          </div>
         </div>
-        <h3 class="mt-5 text-base font-bold text-[var(--text)]">{{ title }}</h3>
-        <p class="mt-2 text-sm leading-6 text-[var(--text-soft)]">{{ description }}</p>
-      </article>
-    {% endfor %}
-  </div>
-</section>
+        <p class="image-credit">Image: <a href="https://unsplash.com/photos/a-room-with-a-couch-computer-desk-and-a-chair-w8OydDk2ANc" target="_blank" rel="noopener">Unsplash</a></p>
+      </div>
+    </div>
+  </section>
 
-<section class="rounded-[1.25rem] border border-[var(--border)] bg-[var(--surface-soft)] p-7 sm:p-10">
-  <div class="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-center">
+  <section class="home-section" id="features">
+    <div class="section-heading">
+      <div class="section-kicker">Platform</div>
+      <h2>Everything important, in one place.</h2>
+      <p>A focused interface built around the real workflow of hostel administrators and students, without decorative UI getting in the way.</p>
+    </div>
+
+    <div class="feature-grid">
+      {% set features = [
+        ('fa-users', 'Student management', 'Profiles, academic details and room allocations stay organized.'),
+        ('fa-building', 'Blocks & rooms', 'Manage blocks, rooms, capacity and current allocations.'),
+        ('fa-calendar-check', 'Attendance', 'Keep daily attendance records with location-aware workflows.'),
+        ('fa-indian-rupee-sign', 'Fees & payments', 'Track fees, balances and payment history without spreadsheets.'),
+        ('fa-triangle-exclamation', 'Complaints', 'Give students a clear channel to raise and follow complaints.'),
+        ('fa-chart-line', 'Operations overview', 'Surface the metrics that matter through focused dashboards.')
+      ] %}
+      {% for icon, title, description in features %}
+        <article class="feature-card">
+          <div class="feature-icon"><i class="fa-solid {{ icon }}" aria-hidden="true"></i></div>
+          <h3>{{ title }}</h3>
+          <p>{{ description }}</p>
+        </article>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section class="home-cta">
     <div>
-      <p class="text-xs font-bold uppercase tracking-[.16em] text-[var(--brand-2)]">Ready when you are</p>
-      <h2 class="mt-3 text-2xl font-bold text-[var(--text)] sm:text-3xl">A cleaner operating system for your hostel.</h2>
-      <p class="mt-3 max-w-2xl text-sm leading-6 text-[var(--text-soft)]">Sign in to access your role-specific dashboard and continue managing hostel operations.</p>
+      <div class="section-kicker">Ready when you are</div>
+      <h2>A cleaner operating system for your hostel.</h2>
+      <p>Sign in to access the role-specific dashboard and continue managing hostel operations.</p>
     </div>
-    <a href="{{ url_for('auth.login') }}" class="primary inline-flex min-h-12 items-center justify-center gap-2 rounded-[.625rem] px-6 text-sm font-bold">
-      Open HostelOS
-      <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
-    </a>
-  </div>
-</section>
+    <a href="{{ url_for('auth.login') }}" class="primary">Open HostelOS <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+  </section>
+</div>
 {% endblock %}

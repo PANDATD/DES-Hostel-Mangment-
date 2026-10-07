@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#F7F8FA">
+  <meta name="theme-color" content="#f5f7fb">
   <meta name="description" content="HostelOS is a responsive hostel management system for students and administrators, covering students, rooms, fees, attendance, complaints and hostel operations.">
   <meta name="author" content="Tejas Dixit">
   <meta name="creator" content="Tejas Dixit">
@@ -49,10 +49,7 @@
       document.documentElement.dataset.theme = dark ? "dark" : "light";
     })();
   </script>
-  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.3.1/css/fontawesome.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.3.1/css/solid.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.3.1/css/brands.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.3.1/css/all.min.css">
   <title>{% block title %}HostelOS — Professional Hostel Management{% endblock %}</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='app.css') }}">
   {% block head %}{% endblock %}
@@ -63,24 +60,30 @@
   {% if current_user.is_authenticated %}
     {% set endpoint = request.endpoint or '' %}
     <header class="mobile-header">
-      <a class="brand" href="{{ url_for('main.index') }}" aria-label="Hostel Management home">
+      <a class="brand" href="{{ url_for('main.index') }}" aria-label="HostelOS home">
         <img class="brand-mark brand-logo" src="{{ url_for('static', filename='logo.svg') }}" alt="HostelOS">
-        <span class="brand-text"><strong>Hostel</strong><small>Management</small></span>
+        <span class="brand-text"><strong>HostelOS</strong><small>Hostel Management</small></span>
       </a>
-      <div class="flex items-center gap-2"><button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch theme" title="Switch theme"><i class="fa-solid fa-sun theme-light-icon" aria-hidden="true"></i><i class="fa-solid fa-moon theme-dark-icon" aria-hidden="true"></i></button><button class="menu-toggle" type="button" aria-controls="app-sidebar" aria-expanded="false" aria-label="Open navigation">
-        <span></span><span></span><span></span>
-      </button></div>
+      <div>
+        <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch theme" title="Switch theme">
+          <i class="fa-solid fa-sun theme-light-icon" aria-hidden="true"></i>
+          <i class="fa-solid fa-moon theme-dark-icon" aria-hidden="true"></i>
+        </button>
+        <button class="menu-toggle" type="button" aria-controls="app-sidebar" aria-expanded="false" aria-label="Open navigation">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
     </header>
 
     <div class="sidebar-backdrop" data-close-nav></div>
     <div class="app-shell">
       <aside class="sidebar" id="app-sidebar" aria-label="Primary navigation">
         <div class="sidebar-head">
-          <a class="brand" href="{{ url_for('main.index') }}" aria-label="Hostel Management home">
-            <span class="brand-mark" aria-hidden="true">HM</span>
-            <span class="brand-text"><strong>Hostel</strong><small>Management</small></span>
+          <a class="brand" href="{{ url_for('main.index') }}" aria-label="HostelOS home">
+            <img class="brand-mark brand-logo" src="{{ url_for('static', filename='logo.svg') }}" alt="HostelOS">
+            <span class="brand-text"><strong>HostelOS</strong><small>Hostel Management</small></span>
           </a>
-          <div class="flex items-center justify-between gap-2">
+          <div>
             <span class="role-pill">{{ 'Administrator' if current_user.role == 'ADMIN' else 'Student' }}</span>
             <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch theme" title="Switch theme">
               <i class="fa-solid fa-sun theme-light-icon" aria-hidden="true"></i>
@@ -90,23 +93,23 @@
         </div>
 
         <nav class="primary-nav">
-          <p class="nav-label">Menu</p>
+          <p class="nav-label">Workspace</p>
           {% if current_user.role == 'ADMIN' %}
-            <a class="nav-link {{ 'active' if endpoint == 'admin.dashboard' else '' }}" href="{{ url_for('admin.dashboard') }}"><span class="nav-icon" aria-hidden="true"><i class="fa-solid fa-gauge-high"></i></span><span>Dashboard</span></a>
-            <a class="nav-link {{ 'active' if endpoint in ['admin.students', 'admin.edit_student'] else '' }}" href="{{ url_for('admin.students') }}"><span class="nav-icon" aria-hidden="true"><i class="fa-solid fa-users"></i></span><span>Students</span></a>
-            <a class="nav-link {{ 'active' if endpoint in ['admin.blocks', 'admin.edit_block'] else '' }}" href="{{ url_for('admin.blocks') }}"><span class="nav-icon" aria-hidden="true"><i class="fa-solid fa-building"></i></span><span>Blocks</span></a>
-            <a class="nav-link {{ 'active' if endpoint in ['admin.rooms', 'admin.create_room', 'admin.edit_room'] else '' }}" href="{{ url_for('admin.rooms') }}"><span class="nav-icon" aria-hidden="true"><i class="fa-solid fa-door-open"></i></span><span>Rooms</span></a>
-            <a class="nav-link {{ 'active' if endpoint in ['admin.complaints', 'admin.edit_complaint'] else '' }}" href="{{ url_for('admin.complaints') }}"><span class="nav-icon" aria-hidden="true"><i class="fa-solid fa-triangle-exclamation"></i></span><span>Complaints</span></a>
-            <a class="nav-link {{ 'active' if endpoint in ['admin.fees', 'admin.edit_fee', 'admin.edit_payment'] else '' }}" href="{{ url_for('admin.fees') }}"><span class="nav-icon" aria-hidden="true"><i class="fa-solid fa-indian-rupee-sign"></i></span><span>Fees</span></a>
-            <a class="nav-link {{ 'active' if endpoint in ['admin.attendance', 'admin.create_geofence', 'admin.edit_geofence', 'admin.edit_attendance'] else '' }}" href="{{ url_for('admin.attendance') }}"><span class="nav-icon" aria-hidden="true"><i class="fa-solid fa-calendar-check"></i></span><span>Attendance</span></a>
-            <a class="nav-link {{ 'active' if endpoint in ['admin.master_data', 'admin.edit_master_data'] else '' }}" href="{{ url_for('admin.master_data') }}"><span class="nav-icon" aria-hidden="true"><i class="fa-solid fa-database"></i></span><span>Master Data</span></a>
+            <a class="nav-link {{ 'active' if endpoint == 'admin.dashboard' else '' }}" href="{{ url_for('admin.dashboard') }}"><span class="nav-icon"><i class="fa-solid fa-gauge-high" aria-hidden="true"></i></span><span>Dashboard</span></a>
+            <a class="nav-link {{ 'active' if endpoint in ['admin.students', 'admin.edit_student'] else '' }}" href="{{ url_for('admin.students') }}"><span class="nav-icon"><i class="fa-solid fa-users" aria-hidden="true"></i></span><span>Students</span></a>
+            <a class="nav-link {{ 'active' if endpoint in ['admin.blocks', 'admin.edit_block'] else '' }}" href="{{ url_for('admin.blocks') }}"><span class="nav-icon"><i class="fa-solid fa-building" aria-hidden="true"></i></span><span>Blocks</span></a>
+            <a class="nav-link {{ 'active' if endpoint in ['admin.rooms', 'admin.create_room', 'admin.edit_room'] else '' }}" href="{{ url_for('admin.rooms') }}"><span class="nav-icon"><i class="fa-solid fa-door-open" aria-hidden="true"></i></span><span>Rooms</span></a>
+            <a class="nav-link {{ 'active' if endpoint in ['admin.complaints', 'admin.edit_complaint'] else '' }}" href="{{ url_for('admin.complaints') }}"><span class="nav-icon"><i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i></span><span>Complaints</span></a>
+            <a class="nav-link {{ 'active' if endpoint in ['admin.fees', 'admin.edit_fee', 'admin.edit_payment'] else '' }}" href="{{ url_for('admin.fees') }}"><span class="nav-icon"><i class="fa-solid fa-indian-rupee-sign" aria-hidden="true"></i></span><span>Fees</span></a>
+            <a class="nav-link {{ 'active' if endpoint in ['admin.attendance', 'admin.create_geofence', 'admin.edit_geofence', 'admin.edit_attendance'] else '' }}" href="{{ url_for('admin.attendance') }}"><span class="nav-icon"><i class="fa-solid fa-calendar-check" aria-hidden="true"></i></span><span>Attendance</span></a>
+            <a class="nav-link {{ 'active' if endpoint in ['admin.master_data', 'admin.edit_master_data'] else '' }}" href="{{ url_for('admin.master_data') }}"><span class="nav-icon"><i class="fa-solid fa-database" aria-hidden="true"></i></span><span>Master Data</span></a>
           {% else %}
-            <a class="nav-link {{ 'active' if endpoint == 'student.dashboard' else '' }}" href="{{ url_for('student.dashboard') }}"><span class="nav-icon" aria-hidden="true">⌂</span><span>Dashboard</span></a>
-            <a class="nav-link {{ 'active' if endpoint in ['student.complaints', 'student.edit_complaint'] else '' }}" href="{{ url_for('student.complaints') }}"><span class="nav-icon" aria-hidden="true">!</span><span>Complaints</span></a>
-            <a class="nav-link {{ 'active' if endpoint == 'student.fees' else '' }}" href="{{ url_for('student.fees') }}"><span class="nav-icon" aria-hidden="true">₹</span><span>Fees</span></a>
-            <a class="nav-link {{ 'active' if endpoint == 'student.attendance' else '' }}" href="{{ url_for('student.attendance') }}"><span class="nav-icon" aria-hidden="true">✓</span><span>Attendance</span></a>
+            <a class="nav-link {{ 'active' if endpoint == 'student.dashboard' else '' }}" href="{{ url_for('student.dashboard') }}"><span class="nav-icon"><i class="fa-solid fa-gauge-high" aria-hidden="true"></i></span><span>Dashboard</span></a>
+            <a class="nav-link {{ 'active' if endpoint in ['student.complaints', 'student.edit_complaint'] else '' }}" href="{{ url_for('student.complaints') }}"><span class="nav-icon"><i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i></span><span>Complaints</span></a>
+            <a class="nav-link {{ 'active' if endpoint == 'student.fees' else '' }}" href="{{ url_for('student.fees') }}"><span class="nav-icon"><i class="fa-solid fa-indian-rupee-sign" aria-hidden="true"></i></span><span>Fees</span></a>
+            <a class="nav-link {{ 'active' if endpoint == 'student.attendance' else '' }}" href="{{ url_for('student.attendance') }}"><span class="nav-icon"><i class="fa-solid fa-calendar-check" aria-hidden="true"></i></span><span>Attendance</span></a>
           {% endif %}
-          <a class="nav-link {{ 'active' if endpoint == 'auth.profile' else '' }}" href="{{ url_for('auth.profile') }}"><span class="nav-icon" aria-hidden="true"><i class="fa-solid fa-user"></i></span><span>Profile</span></a>
+          <a class="nav-link {{ 'active' if endpoint == 'auth.profile' else '' }}" href="{{ url_for('auth.profile') }}"><span class="nav-icon"><i class="fa-solid fa-user" aria-hidden="true"></i></span><span>Profile</span></a>
         </nav>
 
         <div class="sidebar-foot">
@@ -120,6 +123,7 @@
           </form>
         </div>
       </aside>
+
       <main class="main-content" id="main-content" tabindex="-1">
         <div class="content-inner">
   {% else %}
@@ -128,7 +132,7 @@
         <img class="brand-mark brand-logo" src="{{ url_for('static', filename='logo.svg') }}" alt="HostelOS">
         <span class="brand-text"><strong>HostelOS</strong><small>Professional Hostel Management</small></span>
       </a>
-      <button class="theme-toggle ml-auto" type="button" data-theme-toggle aria-label="Switch theme" title="Switch theme">
+      <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch theme" title="Switch theme">
         <i class="fa-solid fa-sun theme-light-icon" aria-hidden="true"></i>
         <i class="fa-solid fa-moon theme-dark-icon" aria-hidden="true"></i>
       </button>
@@ -152,11 +156,11 @@
   {% endif %}
 
   <footer class="site-footer">
-    <div class="content-inner" style="padding-top:0;padding-bottom:18px;">
+    <div class="content-inner">
       <span>HostelOS · Professional Hostel Management</span>
-      <span> · </span>
-      <a href="https://tejasdixit.in" rel="author noopener" target="_blank">Maintained & developed by Tejas Dixit</a>
-      <span> · </span>
+      <span>·</span>
+      <a href="https://tejasdixit.in" rel="author noopener" target="_blank">Maintained &amp; developed by Tejas Dixit</a>
+      <span>·</span>
       <a href="https://des-hostel-mangment.vercel.app" rel="home">Live application</a>
     </div>
   </footer>

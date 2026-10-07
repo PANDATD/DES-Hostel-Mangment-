@@ -21,10 +21,10 @@
   <h2>Quick actions</h2>
   <p class="muted">Access your most-used hostel services.</p>
   <div class="quick-actions">
-    <a class="primary" href="{{ url_for('student.attendance') }}">Mark attendance</a>
-    <a class="secondary" href="{{ url_for('student.complaints') }}">My complaints</a>
-    <a class="secondary" href="{{ url_for('student.fees') }}">My fees</a>
-    <a class="secondary" href="{{ url_for('auth.profile') }}">Profile & security</a>
+    <a class="primary" href="{{ url_for('student.attendance') }}"><i class="fa-solid fa-location-crosshairs" aria-hidden="true"></i> Mark attendance</a>
+    <a class="secondary" href="{{ url_for('student.complaints') }}"><i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i> My complaints</a>
+    <a class="secondary" href="{{ url_for('student.fees') }}"><i class="fa-solid fa-indian-rupee-sign" aria-hidden="true"></i> My fees</a>
+    <a class="secondary" href="{{ url_for('auth.profile') }}"><i class="fa-solid fa-user-shield" aria-hidden="true"></i> Profile & security</a>
   </div>
 </div>
 {% endblock %}
