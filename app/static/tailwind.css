@@ -481,3 +481,7 @@ tbody tr:hover td { background: var(--surface-soft); }
 html.dark .theme-toggle .theme-light-icon { display: none; }
 html.dark .theme-toggle .theme-dark-icon { display: inline-block; }
 @media (max-width: 899px) { .theme-toggle { margin-right: 6px; } }
+
+
+.brand-logo { object-fit: cover; padding: 0; background: transparent; box-shadow: none; }
+.site-footer .content-inner { display: flex; flex-wrap: wrap; align-items: center; gap: .35rem; }
