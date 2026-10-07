@@ -1,7 +1,13 @@
 {% extends "base.html" %}
 {% block title %}Admin Dashboard{% endblock %}
 {% block content %}
-<h1>Admin Dashboard</h1>
+<div class="dashboard-intro">
+  <div>
+    <h1>Admin Dashboard</h1>
+    <p class="muted">Overview of hostel operations and current activity.</p>
+  </div>
+</div>
+
 <div class="grid metrics">
   <div class="card"><strong>{{ students }}</strong><span>Active students</span></div>
   <div class="card"><strong>{{ active_rooms }}</strong><span>Active rooms</span></div>
@@ -10,5 +16,18 @@
   <div class="card"><strong>{{ open_complaints }}</strong><span>Open complaints</span></div>
   <div class="card"><strong>₹{{ '%.2f'|format(outstanding) }}</strong><span>Outstanding fees</span></div>
   <div class="card"><strong>{{ attendance_today }}</strong><span>Attendance today</span></div>
+</div>
+
+<div class="card">
+  <h2>Quick actions</h2>
+  <p class="muted">Jump directly to the most common administration tasks.</p>
+  <div class="quick-actions">
+    <a class="primary" href="{{ url_for('admin.students') }}">Manage students</a>
+    <a class="secondary" href="{{ url_for('admin.rooms') }}">Manage rooms</a>
+    <a class="secondary" href="{{ url_for('admin.complaints') }}">Review complaints</a>
+    <a class="secondary" href="{{ url_for('admin.fees') }}">Manage fees</a>
+    <a class="secondary" href="{{ url_for('admin.attendance') }}">Attendance</a>
+    <a class="secondary" href="{{ url_for('admin.master_data') }}">Master data</a>
+  </div>
 </div>
 {% endblock %}
