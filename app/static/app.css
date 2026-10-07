@@ -372,26 +372,106 @@ details.card > form { padding: 22px; }
   white-space: nowrap !important; border: 0 !important;
 }
 
-/* Gruvbox hard-dark overrides */
-body { background: var(--bg); }
-.sidebar, .mobile-header { background: rgba(40, 40, 40, .98); }
-.guest { background: radial-gradient(circle at 12% 0, #32302f 0, transparent 34%), var(--bg); }
-.brand-mark { color: #1d2021; }
-.role-pill { background: #3c3836; color: #83a598; }
-.nav-link:hover { background: #3c3836; color: #83a598; }
-.nav-link.active { background: #3c3836; color: #83a598; box-shadow: inset 3px 0 0 #83a598; }
-.logout-button, .secondary { background: #282828; color: #d5c4a1; }
-.logout-button:hover { background: #3c2423; color: #fb4934; }
-input, select, textarea { background: #282828; color: #ebdbb2; }
-input:hover, select:hover, textarea:hover { border-color: #7c6f64; }
-input:disabled, select:disabled, textarea:disabled { background: #3c3836; color: #928374; }
-table th { background: #32302f; color: #a89984; }
-tbody tr:hover td { background: #2d2d2d; }
-.three > div { background: #32302f; border-color: #504945; color: #bdae93; }
-.card:hover { border-color: #665c54; }
-.account-avatar { background: #3c3836; color: #83a598; }
-.quick-actions .secondary:hover { background: #3c3836; color: #83a598; }
-.menu-toggle:hover { background: #3c3836; }
-.flash.success { background: #3b3f25; color: #b8bb26; }
-.flash.error, .flash.danger { background: #3c2423; color: #fb4934; }
-.flash.warning { background: #3d3420; color: #fabd2f; }
+
+
+/* HostelOS design tokens: Day */
+:root {
+  color-scheme: light;
+  --bg: #F7F8FA;
+  --surface: #FFFFFF;
+  --surface-soft: #F0F2F5;
+  --surface-muted: #F0F2F5;
+  --text: #172033;
+  --text-soft: #667085;
+  --text-faint: #98A2B3;
+  --border: #E4E7EC;
+  --border-strong: #D0D5DD;
+  --brand: #2563EB;
+  --brand-2: #0EA5A4;
+  --brand-3: #EEF2F6;
+  --success: #12B76A;
+  --success-soft: #ECFDF3;
+  --danger: #F04438;
+  --danger-soft: #FEF3F2;
+  --warning: #F79009;
+  --warning-soft: #FFFAEB;
+  --shadow-sm: 0 1px 2px rgba(16,24,40,0.05);
+  --shadow: 0 4px 12px rgba(16,24,40,0.08);
+  --shadow-lg: 0 12px 28px rgba(16,24,40,0.12);
+}
+
+/* HostelOS design tokens: Night */
+html.dark {
+  color-scheme: dark;
+}
+html.dark {
+  --bg: #101828;
+  --surface: #182230;
+  --surface-soft: #202B3A;
+  --surface-muted: #202B3A;
+  --text: #F2F4F7;
+  --text-soft: #98A2B3;
+  --text-faint: #667085;
+  --border: #344054;
+  --border-strong: #475467;
+  --brand: #60A5FA;
+  --brand-2: #2DD4BF;
+  --brand-3: #202B3A;
+  --success: #32D583;
+  --success-soft: #123A2A;
+  --danger: #F97066;
+  --danger-soft: #3B1E1C;
+  --warning: #FDB022;
+  --warning-soft: #3A2C12;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,.24);
+  --shadow: 0 4px 12px rgba(0,0,0,.30);
+  --shadow-lg: 0 12px 28px rgba(0,0,0,.42);
+}
+
+/* Token-driven component surfaces */
+body { background: var(--bg); color: var(--text); font-family: var(--font-sans); font-size: .9375rem; letter-spacing: -.015em; }
+h1, h2, h3 { color: var(--text); font-weight: 700; }
+p, td { color: var(--text-soft); }
+a { color: var(--brand); }
+.sidebar, .mobile-header { background: color-mix(in srgb, var(--surface) 96%, transparent); border-color: var(--border); }
+.brand, .brand:hover { color: var(--text); }
+.brand-text small, .muted { color: var(--text-soft); }
+.role-pill, .account-avatar { background: var(--brand-3); color: var(--brand); border-color: var(--border); }
+.nav-link { color: var(--text-soft); }
+.nav-link:hover, .nav-link.active { background: var(--brand-3); color: var(--brand); }
+.nav-link.active { box-shadow: inset 3px 0 0 var(--brand); }
+.card { background: var(--surface); border-color: var(--border); box-shadow: var(--shadow-sm); }
+.card:hover { border-color: var(--border-strong); }
+.metrics strong { color: var(--text); }
+input, select, textarea, .secondary, .logout-button { background: var(--surface); color: var(--text); border-color: var(--border-strong); }
+input:disabled, select:disabled, textarea:disabled { background: var(--surface-soft); color: var(--text-faint); }
+input:focus, select:focus, textarea:focus { border-color: var(--brand); box-shadow: 0 0 0 3px color-mix(in srgb, var(--brand) 16%, transparent); }
+.primary { background: linear-gradient(135deg, var(--brand), var(--brand-2)); color: #fff; }
+.primary:hover { color: #fff; }
+.secondary:hover { background: var(--brand-3); color: var(--brand); border-color: var(--brand); }
+table th { background: var(--surface-soft); color: var(--text-soft); }
+tbody tr:hover td { background: var(--surface-soft); }
+.three > div { background: var(--surface-soft); border-color: var(--border); color: var(--text-soft); }
+.flash.success { background: var(--success-soft); color: var(--success); border-color: color-mix(in srgb, var(--success) 28%, var(--border)); }
+.flash.error, .flash.danger { background: var(--danger-soft); color: var(--danger); border-color: color-mix(in srgb, var(--danger) 28%, var(--border)); }
+.flash.warning { background: var(--warning-soft); color: var(--warning); border-color: color-mix(in srgb, var(--warning) 28%, var(--border)); }
+.status-resolved, .status-paid { background: var(--success-soft); color: var(--success); }
+.status-open, .status-pending, .status-unpaid, .status-partial { background: var(--warning-soft); color: var(--warning); }
+.status-in-progress { background: color-mix(in srgb, var(--brand-2) 12%, var(--surface)); color: var(--brand-2); }
+.guest { background: radial-gradient(circle at 12% 0, color-mix(in srgb, var(--brand-2) 10%, transparent) 0, transparent 34%), var(--bg); }
+.menu-toggle:hover { background: var(--surface-soft); }
+.menu-toggle span { background: var(--text); }
+.sidebar-backdrop { background: rgba(16,24,40,.52); }
+.site-footer { margin-top: 32px; padding-top: 18px; border-top: 1px solid var(--border); color: var(--text-faint); font-size: .75rem; }
+.site-footer a { color: var(--text-soft); text-decoration: none; font-weight: 600; }
+.site-footer a:hover { color: var(--brand); }
+.theme-toggle { min-width: 42px; min-height: 42px; display: inline-grid; place-items: center; border: 1px solid var(--border); border-radius: .625rem; background: var(--surface); color: var(--text-soft); cursor: pointer; }
+.theme-toggle:hover { color: var(--brand); border-color: var(--brand); background: var(--brand-3); }
+.theme-toggle .theme-dark-icon { display: none; }
+html.dark .theme-toggle .theme-light-icon { display: none; }
+html.dark .theme-toggle .theme-dark-icon { display: inline-block; }
+@media (max-width: 899px) { .theme-toggle { margin-right: 6px; } }
+
+
+.brand-logo { object-fit: cover; padding: 0; background: transparent; box-shadow: none; }
+.site-footer .content-inner { display: flex; flex-wrap: wrap; align-items: center; gap: .35rem; }
