@@ -1,243 +1,50 @@
-# Hostel Management — Normalized Standalone Build
+# Hostel Management
 
-A Flask hostel-management application with normalized relational data, full CRUD workflows for the V1 modules, secure password reset, geography-based attendance, Alembic migrations, and automated tests.
+A Flask hostel-management application with relational data models, CRUD workflows, authentication, password reset, attendance, database migrations, and tests.
 
-## Included features
+## Main areas
 
 - Admin and student authentication
-- Secure forgot-password/reset-password flow
-- Students: create, read, update, delete
-- Blocks: create, read, update, delete
-- Rooms: create, read, update, delete
-- Room allocations: create/transfer, read history, end, delete ended history
-- Complaints: student create/read/edit/delete while open; admin update/edit/delete
-- Fees: create, read, update, delete
-- Fee payments: create, read, update, delete
-- Attendance: student geo check-in; admin read/update/delete
-- Attendance geofences: create, read, update, delete
-- Normalized master data: courses, academic years, complaint categories, fee types, payment methods
-- Admin and student dashboards
-
-## Database normalization
-
-Repeated business values are no longer stored as unconstrained text in transactional tables.
-
-Normalized lookup tables:
-
-- `courses`
-- `academic_years`
-- `complaint_categories`
-- `fee_types`
-- `payment_methods`
-
-Transactional tables reference them with foreign keys:
-
-- `student_profiles.course_id -> courses.id`
-- `student_profiles.academic_year_id -> academic_years.id`
-- `complaints.category_id -> complaint_categories.id`
-- `fees.academic_year_id -> academic_years.id`
-- `fees.fee_type_id -> fee_types.id`
-- `fee_payments.payment_method_id -> payment_methods.id`
-
-The schema also contains uniqueness constraints, domain checks, indexes, one-current-room-allocation enforcement, one-attendance-per-student-per-day enforcement, and SQLite foreign-key checking.
-
-## Password reset
-
-Password-reset tokens are:
-
-- generated with cryptographic randomness;
-- stored only as SHA-256 hashes;
-- time limited;
-- single use;
-- invalidated when a newer token is requested or a token is consumed.
-
-The response to a forgot-password request is intentionally generic so the page does not reveal whether an email address exists.
-
-For local development, when SMTP is not configured and `PASSWORD_RESET_SHOW_LINK=1`, the reset link is shown on screen so the standalone build remains testable. In production, configure SMTP and set `PASSWORD_RESET_SHOW_LINK=0`.
+- Student, block, room and allocation management
+- Complaints
+- Fees and payments
+- Attendance and geofencing
+- Normalized master data
+- Alembic migrations
 
 ## Requirements
 
 - Python 3.12
 - SQLite for local development
-- PostgreSQL for Vercel/production
-- Psycopg 3 (`psycopg`) for PostgreSQL connectivity
+- PostgreSQL for deployment where configured
+- Psycopg 3 for PostgreSQL connectivity
 
-## Run the bundled standalone database
-
-The ZIP includes an already migrated `instance/hostel.db` containing the data that was supplied with the original project.
+## Local setup
 
 ```bash
 python3.12 -m venv .venv
-source .venv/bin/activate        # Windows: .venv\Scripts\activate
+source .venv/bin/activate
 pip install -r requirements.txt
 python -m flask --app run.py db upgrade
 python -m flask --app run.py doctor
 python -m flask --app run.py run --debug
 ```
 
-Open the local Flask address shown in the terminal.
+## Database
 
-## Create a fresh database instead
+Database schema changes are managed through Flask-Migrate/Alembic. Run migrations before using a fresh database.
 
-Delete or move `instance/hostel.db`, then run:
+## Authentication and secrets
 
-```bash
-python -m flask --app run.py db upgrade
-python -m flask --app run.py seed-demo
-python -m flask --app run.py run --debug
-```
-
-`seed-demo` creates normalized master data, Block 2, 97 rooms, 106 demo students, room allocations, an admin, and one attendance geofence.
-
-## Demo credentials
-
-Admin:
-
-```text
-admin@example.com
-Admin@123
-```
-
-Seeded students:
-
-```text
-b2student001@example.com
-...
-b2student106@example.com
-
-Password: Student@123
-```
-
-These are development credentials. Change them before any real deployment.
-
-## Local admin setup
-
-The SQLite database is created by the migration system. For a fresh checkout:
-
-```bash
-uv run flask --app run.py db upgrade
-uv run flask --app run.py doctor
-```
-
-To create or reset a local admin account without putting the password in source control:
-
-```bash
-uv run flask --app run.py create-admin
-```
-
-To reset an existing admin account only:
-
-```bash
-uv run flask --app run.py reset-admin-password --email admin@example.com
-```
-
-Both commands prompt for the password interactively. If the database schema has not been migrated, the commands stop with an explicit migration message instead of producing a database "no such table" traceback.
-
-## Password-reset email configuration
-
-Configure these values in `.env` for SMTP delivery:
-
-```dotenv
-PASSWORD_RESET_TTL_MINUTES=30
-PASSWORD_RESET_SHOW_LINK=0
-MAIL_SERVER=smtp.example.com
-MAIL_PORT=587
-MAIL_USERNAME=user@example.com
-MAIL_PASSWORD=change-me
-MAIL_USE_TLS=1
-MAIL_DEFAULT_SENDER=user@example.com
-MAIL_TIMEOUT=10
-```
-
-The application uses Python's standard `smtplib`, so no additional email package is required.
-
-## Attendance configuration
-
-The browser sends latitude, longitude, and reported accuracy. The server calculates Haversine distance and validates the active geofence, GPS accuracy, time window, student status, and duplicate attendance.
-
-For demo seeding, configure:
-
-```dotenv
-HOSTEL_LAT=18.5204
-HOSTEL_LNG=73.8567
-HOSTEL_RADIUS_METRES=150
-MAX_GPS_ACCURACY_METRES=100
-```
-
-Replace demo coordinates with the real hostel coordinates before real use.
-
-## Database migration
-
-Existing databases at revision `0001_v1_schema` are upgraded by:
-
-```bash
-python -m flask --app run.py db upgrade
-```
-
-Revision `0002_normalized_crud_reset` migrates existing course/year/category/fee/payment values into lookup tables and preserves existing records through foreign-key mappings.
-
-Check integrity after migration:
-
-```bash
-python -m flask --app run.py doctor
-```
-
-`doctor` reports the database path, tables, SQLite foreign-key state, journal mode, and foreign-key violations.
+Passwords and reset tokens are handled by the application. Development credentials or reset links must not be reused for a real deployment. Keep database credentials, SMTP credentials, and secret keys outside Git.
 
 ## Tests
 
-Install the development group with `uv`, or install `pytest` separately, then run:
-
 ```bash
 pytest -q
-ruff check app tests migrations/versions/0002_normalized_crud_reset.py
+ruff check app tests migrations/versions
 ```
 
-The supplied test suite covers login, password reset, student CRUD, block/room CRUD, allocation lifecycle, complaint CRUD/admin workflow, fee/payment CRUD, normalized master-data CRUD, attendance duplicate protection/admin CRUD, geofence CRUD, and Haversine calculation.
+## Project work
 
-## Deletion behaviour
-
-Some delete operations are intentionally destructive:
-
-- deleting a student removes records owned by that student, including complaints, attendance, allocations, fees, and payments;
-- deleting a fee also deletes its payments;
-- a block cannot be deleted while it still contains rooms;
-- a room cannot be deleted while allocation history exists;
-- a referenced master-data value cannot be deleted and should be deactivated instead;
-- a geofence with attendance history cannot be deleted.
-
-Use database backups before bulk administrative changes.
-
-## Vercel + Neon deployment
-
-The application uses SQLite locally and PostgreSQL on Vercel. Do not use the Vercel filesystem as the production database because serverless filesystem storage is not durable application storage.
-
-Neon can be connected through the Vercel Marketplace. The Vercel Neon integration can provision or connect a Neon PostgreSQL database and provide `DATABASE_URL` to the project.
-
-1. In the Vercel project, open **Integrations / Marketplace** and add **Neon**.
-2. Create a new Neon database or connect an existing Neon account.
-3. Make sure the Vercel **Production** environment receives `DATABASE_URL`. If Neon also provides `DATABASE_URL_UNPOOLED`, add that too.
-4. Redeploy the project.
-5. The Vercel build automatically runs:
-
-```bash
-python3 -m flask --app run.py db upgrade
-```
-
-The build script prefers `DATABASE_URL_UNPOOLED` for migrations and falls back to `DATABASE_URL`. This creates/updates all Alembic-managed tables in Neon before the deployment is served.
-6. Create the production admin account against the same database:
-
-```bash
-DATABASE_URL='postgresql://USER:PASSWORD@HOST/DB?sslmode=require' \
-  uv run flask --app run.py create-admin --email admin@example.com
-```
-
-Do not commit the Neon connection string or database password. Keep it in Vercel environment variables or an ignored local `.env` file.
-
-The application converts a standard `postgresql://` URL to SQLAlchemy's explicit `postgresql+psycopg://` URL and uses Psycopg 3. The runtime uses `DATABASE_URL`; the Vercel build uses `DATABASE_URL_UNPOOLED` for migrations when it is available.
-
-Also set a stable production `SECRET_KEY` in Vercel. Do not rely on the development fallback.
-
-SQLite remains the default only when the application is running outside Vercel and `DATABASE_URL` is not set.
-
-# DES-Hostel-Mangment-
+Tejas Dixit — https://tejasdixit.in
