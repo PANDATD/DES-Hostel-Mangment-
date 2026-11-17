@@ -20,5 +20,5 @@ psycopg[binary]==3.2.10
 python-dotenv==1.2.3
 sqlalchemy==2.0.52
 typing-extensions==4.16.0
-werkzeug==3.1.8
+werkzeug==3.1.9
 wtforms==3.2.2
